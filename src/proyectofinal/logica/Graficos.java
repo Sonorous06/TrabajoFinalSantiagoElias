@@ -6,9 +6,9 @@ import javax.swing.JPanel;
 public abstract class Graficos extends JPanel {
 
     //wey con estas haces que tus subclases , uses los datos directamente
-    protected String titulo; //el nombre que esta arriba de la grafia
-    protected String ejeX; // nombre del eje horiz
-    protected String ejeY; // nombre del eje vert
+    public String titulo; //el nombre que esta arriba de la grafia
+    public String ejeX; // nombre del eje horiz
+    public String ejeY; // nombre del eje vert
             
    //todas las graficas necesitan los calculos de la clase
     protected Estadisticos misDatos;
