@@ -6,7 +6,7 @@ import java.util.Scanner;
 import javax.swing.JFileChooser;
 
 public class LeerArchivo {
-
+    
     public static int[] obtenerDatos(String categoriaElegida) {
 
         JFileChooser selector = new JFileChooser();
@@ -52,6 +52,36 @@ public class LeerArchivo {
 
         }
         //si falla , devuelve nada
+        return null;
+    }
+
+    // igual que obtenerDatos pero recibe el archivo ya elegido, sin abrir diálogo
+    public static int[] obtenerDatosDe(File archivo, String categoriaElegida) {
+        try {
+            Scanner sc = new Scanner(archivo);
+
+            if (sc.hasNextLine()) sc.nextLine(); // saltamos encabezado
+
+            ArrayList<Integer> listaTemporal = new ArrayList<>();
+
+            while (sc.hasNext()) {
+                String categoria = sc.next();
+                int valor = sc.nextInt();
+                if (valor >= 0 && valor <= 60 && categoria.equalsIgnoreCase(categoriaElegida)) {
+                    listaTemporal.add(valor);
+                }
+            }
+            sc.close();
+
+            int[] resultado = new int[listaTemporal.size()];
+            for (int i = 0; i < listaTemporal.size(); i++) {
+                resultado[i] = listaTemporal.get(i);
+            }
+            return resultado;
+
+        } catch (Exception e) {
+            System.out.println("Error al leer: " + e.getMessage());
+        }
         return null;
     }
 

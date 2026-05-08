@@ -19,7 +19,7 @@ public abstract class Graficos extends JPanel {
         this.misDatos = datos;
     }
     
-    // necesitas escribir el codigo del sibujo en cada grafica 
+    // necesitas escribir el codigo del dibujo en cada grafica 
     public abstract void dibujarGrafica(Graphics g);
     
     // esete se llama automaticamente cuando se abre la ventana
