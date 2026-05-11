@@ -15,8 +15,8 @@ public class GraficaPastel extends Graficos {
     private boolean mostrarNumeros; //true = muestra la suma de valores, false = porcentaje
 
     //colores de cada rebanada
-    private static final Color COLOR_CAT1 = new Color(34, 139, 34);
-    private static final Color COLOR_CAT2 = new Color(255, 215, 0);
+    private static final Color colorCat1 = new Color(34, 139, 34);
+    private static final Color colorCat2 = new Color(255, 215, 0);
 
     public GraficaPastel(String titulo, Estadisticos datosCat1, String nombreCat1, Estadisticos datosCat2, String nombreCat2, boolean mostrarNumeros) {
         super(titulo, datosCat1);
@@ -69,10 +69,10 @@ public class GraficaPastel extends Graficos {
         int yCirculo = margen + 10;
 
         //dibujamos las dos rebanadas
-        g.setColor(COLOR_CAT1);
+        g.setColor(colorCat1);
         g.fillArc(xCirculo, yCirculo, diametro, diametro, 0, anguloCat1);
 
-        g.setColor(COLOR_CAT2);
+        g.setColor(colorCat2);
         g.fillArc(xCirculo, yCirculo, diametro, diametro, anguloCat1, anguloCat2);
 
         //borde del círculo
@@ -82,8 +82,8 @@ public class GraficaPastel extends Graficos {
         //etiquetas en el centro de cada rebanada
         g.setFont(new Font("SansSerif", Font.BOLD, 13));
         int radio = diametro / 2;
-        int cx = xCirculo + radio; //centro X del círculo
-        int cy = yCirculo + radio; //centro Y del círculo
+        int cx = xCirculo + radio;
+        int cy = yCirculo + radio;
 
         String etiq1 = construirEtiqueta(nombreCat1, totalCat1, totalGlobal);
         double angMed1 = Math.toRadians(anguloCat1 / 2.0);
@@ -120,13 +120,13 @@ public class GraficaPastel extends Graficos {
         int xCat1 = ancho / 2 - 80;
         int xCat2 = ancho / 2 + 20;
 
-        g.setColor(COLOR_CAT1);
+        g.setColor(colorCat1);
         g.fillRect(xCat1, y, cuad, cuad);
         g.setColor(Color.BLACK);
         g.drawRect(xCat1, y, cuad, cuad);
         g.drawString(" " + nombreCat1, xCat1 + cuad, y + cuad - 2);
 
-        g.setColor(COLOR_CAT2);
+        g.setColor(colorCat2);
         g.fillRect(xCat2, y, cuad, cuad);
         g.setColor(Color.BLACK);
         g.drawRect(xCat2, y, cuad, cuad);

@@ -7,20 +7,24 @@ public class Estadisticos {
     private int[] datos;
     private int numDatos;
 
+    private int[] datosOriginales;
+
     public Estadisticos(int[] arr, int dim) {
-        //guardamos la cantidad de datos
         this.numDatos = dim;
 
-        //creamos nuestro propio arreglo
+        this.datosOriginales = new int[this.numDatos];
         this.datos = new int[this.numDatos];
 
-        //copiamos los valores uno por uno
         for (int i = 0; i < this.numDatos; i++) {
+            this.datosOriginales[i] = arr[i];
             this.datos[i] = arr[i];
         }
 
-        //llamamos a nuestro metodo para que ya esten ordenamos los numeros
         this.ordenar();
+    }
+
+    public int[] getDatosOriginales() {
+        return this.datosOriginales;
     }
 
     private void ordenar() {
@@ -126,69 +130,4 @@ public class Estadisticos {
         return (desvStd() / media()) * 100;
     }
 
-    private String tablaFrecu() {
-        String tabla = "Numero\tF.Abs\tF.Rel\tF.Por\tFrecuencia\n";
-
-        for (int i = 0; i < this.numDatos; i++) {
-
-            // primero revisamos si el número de la posición i lo conto
-            boolean yaContado = false;
-            for (int k = 0; k < i; k++) {
-                if (this.datos[i] == this.datos[k]) {
-                    yaContado = true;
-                }
-            }
-
-            // si NO ha sido contado, hacemos todo el conteo y lo pegamos a la tabla
-            if (yaContado == false) {
-                int fAbs = 0;
-
-                // contamos cuántas veces aparece el número en todo el arreglo
-                for (int j = 0; j < this.numDatos; j++) {
-                    if (this.datos[i] == this.datos[j]) {
-                        fAbs = fAbs + 1;
-                    }
-                }
-
-                double fRel = (double) fAbs / this.numDatos;
-                double fPor = fRel * 100;
-
-                String asteriscos = "";
-                for (int m = 0; m < fAbs; m++) {
-                    asteriscos = asteriscos + "*";
-                }
-
-                tabla = tabla + this.datos[i] + "\t" + fAbs + "\t"
-                        + String.format("%.2f", fRel) + "\t"
-                        + String.format("%.2f%%", fPor) + "\t"
-                        + asteriscos + "\n";
-            }
-        }
-        return tabla;
-    }
-
-    @Override
-    public String toString() {
-        String reporte = "Datos numericos: ";
-
-        // vamos pegando cada número del arreglo
-        for (int d : this.datos) {
-            reporte += d + " "; // El += significa  agrega esto a lo anterior
-        }
-        // pegamos la info línea por línea
-        reporte += "\n" + tablaFrecu();
-        reporte += "\nCantidad de datos: " + this.numDatos;
-        reporte += "\nMinimo: " + minimo();
-        reporte += "\nMaximo: " + maximo();
-        reporte += "\nRango: " + rango();
-
-        // agregamos los cálculos con formato de 2 decimales
-        reporte += "\n1er cuartil: " + String.format("%.2f", cuartil_1());
-        reporte += "\n2do cuartil: " + String.format("%.2f", cuartil_2());
-        reporte += "\n3er cuartil: " + String.format("%.2f", cuartil_3());
-        reporte += "\nMedia: " + String.format("%.2f", media());
-        reporte += "\nDesv. estandar: " + String.format("%.3f", desvStd());
-
-        return reporte;
-    }
 }
