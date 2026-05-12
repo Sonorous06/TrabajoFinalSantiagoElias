@@ -10,6 +10,13 @@ import proyectofinal.graficas.GraficaSecuencia;
 import proyectofinal.logica.Estadisticos;
 import proyectofinal.persistencia.LeerArchivo;
 
+/**
+ * Ventana principal del sistema de Visualización de Datos. Esta clase construye
+ * la interfaz de usuario, los eventos de los botones
+ *
+ * @author Santiago Guillermo Lopez
+ * @author Elias Miguel Sigales
+ */
 public class Main extends JFrame implements ActionListener {
 
     //nombres de los autores que se muestran en "Acerca de"
@@ -44,6 +51,10 @@ public class Main extends JFrame implements ActionListener {
     private JCheckBox chkBoxCat1;
     private JCheckBox chkBoxCat2;
 
+    /**
+     * Constructor que inicializa la ventana principal. Configura el tamaño, la
+     * posición centrada y construye los menús y paneles iniciales
+     */
     public Main() {
         super("Visualización de Datos");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,7 +67,10 @@ public class Main extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    //crea la barra de menú con las opciones Archivo y Acerca de
+    /**
+     * Crea la barra de herramientas superior con opciones de información y
+     * salida
+     */
     private void construirMenu() {
         JMenuBar barra = new JMenuBar();
 
@@ -82,7 +96,10 @@ public class Main extends JFrame implements ActionListener {
         setJMenuBar(barra);
     }
 
-    //arma el área principal: botón de carga arriba y las tres pestañas abajo
+    /**
+     * Define la estructura de paneles dentro de la ventana, incluyendo el botón
+     * de carga y las pestanas para las gráficas.
+     */
     private void construirContenido() {
         JPanel panelPrincipal = new JPanel(new BorderLayout());
 
@@ -109,7 +126,11 @@ public class Main extends JFrame implements ActionListener {
         add(panelPrincipal);
     }
 
-    //pestaña del pastel con sus dos botones de modo
+    /**
+     * Crea el panel de la gráfica de pastel con sus controles
+     *
+     * @return El panel para la pestaña de pastel.
+     */
     private JPanel construirPestañaPastel() {
         JPanel panel = new JPanel(new BorderLayout());
 
@@ -137,7 +158,11 @@ public class Main extends JFrame implements ActionListener {
         return panel;
     }
 
-    //pestaña de secuencia con checkboxes para mostrar u ocultar cada categoría
+    /**
+     * Crea el panel de la gráfica de secuencia con filtros
+     *
+     * @return El panel para la pestaña de secuencia.
+     */
     private JPanel construirPestañaSecuencia() {
         JPanel panel = new JPanel(new BorderLayout());
 
@@ -161,7 +186,10 @@ public class Main extends JFrame implements ActionListener {
         return panel;
     }
 
-    //pestaña del bigote con checkboxes para mostrar u ocultar cada categoría
+    /**
+     * Crea el panel de la gráfica de caja y bigote con filtros de categoría.
+     * @return El panel para la pestaña de bigote.
+     */
     private JPanel construirPestañaBigote() {
         JPanel panel = new JPanel(new BorderLayout());
 
@@ -184,8 +212,10 @@ public class Main extends JFrame implements ActionListener {
         return panel;
     }
 
-
-    //aquí llegan todos los eventos de botones, menús y checkboxes
+    /**
+     * Gestiona las acciones sobre los componentes de la interfaz
+     * @param e El evento generado por el usuario
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
@@ -238,7 +268,10 @@ public class Main extends JFrame implements ActionListener {
         }
     }
 
-    //abre el selector de archivo una sola vez y saca los datos de las dos categorías
+   /**
+     * Proceso de selección de archivo y lectura de datos.
+     * toma las categorías y construye los objetos estadísticos para las graficas.
+     */
     private void cargarDatos() {
         JFileChooser selector = new JFileChooser();
         int estado = selector.showOpenDialog(this);
@@ -263,7 +296,14 @@ public class Main extends JFrame implements ActionListener {
         actualizarGraficas(datos1, datos2, cats[0], cats[1]);
     }
 
-    //crea las tres gráficas con los datos cargados y las mete en sus pestañas
+    /**
+     * Reemplaza las graficas por unas nuevas basadas en los datos cargados.
+     * 
+     * @param datos1 Estadísticas de la categoría 1
+     * @param datos2 Estadísticas de la categoría .
+     * @param cat1 Nombre de la categoría 1
+     * @param cat2 Nombre de la categoría 2.
+     */
     private void actualizarGraficas(Estadisticos datos1, Estadisticos datos2, String cat1, String cat2) {
 
         //para que muestre Categoria y junto el nombre de la categoria
@@ -284,7 +324,7 @@ public class Main extends JFrame implements ActionListener {
         panelSecuencia.add(construirControlesSecuencia(), BorderLayout.SOUTH);
         panelSecuencia.repaint();
 
-        graficaBigote = new GraficaBigote("Boxplot", datos1, cat1, datos2, cat2, chkBoxCat1.isSelected(), chkBoxCat2.isSelected());
+        graficaBigote = new GraficaBigote("Caja y bigote", datos1, cat1, datos2, cat2, chkBoxCat1.isSelected(), chkBoxCat2.isSelected());
         panelBigote.removeAll();
         panelBigote.add(graficaBigote, BorderLayout.CENTER);
         panelBigote.add(construirControlesBigote(), BorderLayout.SOUTH);
@@ -319,6 +359,10 @@ public class Main extends JFrame implements ActionListener {
         return controles;
     }
 
+    /**
+     * Método de inicio de la aplicación.
+     * @param args Argumentos de consola.
+     */
     public static void main(String[] args) {
         new Main();
     }

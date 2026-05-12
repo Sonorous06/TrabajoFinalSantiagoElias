@@ -6,6 +6,11 @@ import java.awt.Graphics;
 import proyectofinal.logica.Estadisticos;
 import proyectofinal.logica.Graficos;
 
+/**
+ * Clase que genera una grafica de secuencia.
+ * Muestra cómo evolucionan los datos punto por punto y añade lineas de referencia
+ * para la media y la desviacion estándar de cada categoria.
+ */
 public class GraficaSecuencia extends Graficos {
 
     //datos de la segunda categoría
@@ -29,6 +34,17 @@ public class GraficaSecuencia extends Graficos {
     private static final int MG_SUP = 40;
     private static final int MG_INF = 50;
 
+    /**
+     * Construye la gráfica de secuencia configurando títulos y datos estadísticos.
+     * 
+     * @param titulo Texto superior de la gráfica.
+     * @param datosCat1 Estadísticas de la primera categoría.
+     * @param nombreCat1 Etiqueta para la primera categoría.
+     * @param datosCat2 Estadísticas de la segunda categoría.
+     * @param nombreCat2 Etiqueta para la segunda categoría.
+     * @param mostrarCat1 Define si se dibuja la primera serie de datos.
+     * @param mostrarCat2 Define si se dibuja la segunda serie de datos.
+     */
     public GraficaSecuencia(String titulo, Estadisticos datosCat1, String nombreCat1, Estadisticos datosCat2, String nombreCat2, boolean mostrarCat1, boolean mostrarCat2) {
         super(titulo, datosCat1);
         this.datosCat2 = datosCat2;
@@ -37,14 +53,29 @@ public class GraficaSecuencia extends Graficos {
         this.mostrarCat1 = mostrarCat1;
         this.mostrarCat2 = mostrarCat2;
     }
-
+    
+    /**
+     * Activa o desactiva la visibilidad de la primera categoría.
+     * @param v true para mostrar, false para ocultar.
+     */
     public void setMostrarCat1(boolean v) {
         this.mostrarCat1 = v; repaint();
     }
+    
+    /**
+     * Activa o desactiva la visibilidad de la primera categoría.
+     * @param v true para mostrar, false para ocultar.
+     */
     public void setMostrarCat2(boolean v) {
         this.mostrarCat2 = v; repaint();
     }
 
+    /**
+     * Método principal que dibuja el fondo, los ejes, las escalas numéricas
+     * y las series de datos con sus respectivas medias.
+     * 
+     * @param g Objeto de gráficos.
+     */
     @Override
     public void dibujarGrafica(Graphics g) {
 
@@ -102,7 +133,24 @@ public class GraficaSecuencia extends Graficos {
 
         dibujarLeyenda(g, ancho, alto);
     }
-
+    
+    /**
+     * Dibuja los puntos y líneas de una serie específica, incluyendo su media y desviación.
+     * 
+     * @param g Objeto de gráficos.
+     * @param datos Arreglo de enteros con los datos.
+     * @param xMin Límite izquierdo del área de dibujo.
+     * @param xMax Límite derecho del área de dibujo.
+     * @param yMin Límite superior del área de dibujo.
+     * @param yMax Límite inferior del área de dibujo.
+     * @param vMin Valor mínimo en la escala de datos.
+     * @param vMax Valor máximo en la escala de datos.
+     * @param colorLinea Color de la línea de tendencia.
+     * @param colorMedia Color para la línea de la media.
+     * @param colorDesv Color para las líneas de desviación.
+     * @param media Valor calculado de la media.
+     * @param desv Valor calculado de la desviación estándar.
+     */
     private void dibujarSerie(Graphics g, int[] datos, int xMin, int xMax, int yMin, int yMax, int vMin, int vMax, Color colorLinea, Color colorMedia, Color colorDesv, double media, double desv) {
 
         int n = datos.length;
@@ -133,7 +181,16 @@ public class GraficaSecuencia extends Graficos {
             g.drawOval(xp - 4, yp - 4, 8, 8);
         }
     }
-
+    
+    /**
+     * Dibuja una línea discontinua (punteada) de forma manual.
+     * 
+     * @param g Objeto de gráficos.
+     * @param x1 Punto inicial X.
+     * @param y1 Punto inicial Y.
+     * @param x2 Punto final X.
+     * @param y2 Punto final Y.
+     */
     private void dibujarLineaPunteada(Graphics g, int x1, int y1, int x2, int y2) {
         int x = x1;
         boolean on = true;
@@ -146,6 +203,10 @@ public class GraficaSecuencia extends Graficos {
         }
     }
 
+    /**
+     * Calcula el valor máximo entre todas las series visibles para ajustar la escala del eje Y.
+     * @return El valor máximo con un pequeño margen de seguridad.
+     */
     private int calcularMaxGlobal() {
         int max = 0;
         if (mostrarCat1 && misDatos != null && misDatos.maximo() > max) max = misDatos.maximo();
@@ -153,6 +214,10 @@ public class GraficaSecuencia extends Graficos {
         return (int) (max * 1.1) + 1;
     }
 
+    /**
+     * Determina cuántos puntos tiene la serie más larga para ajustar el eje X.
+     * @return El número de puntos total a graficar.
+     */
     private int calcularMaxPuntos() {
         int n1 = (mostrarCat1 && misDatos != null) ? misDatos.getNumDatos() : 0;
         int n2 = (mostrarCat2 && datosCat2 != null) ? datosCat2.getNumDatos() : 0;
@@ -160,16 +225,25 @@ public class GraficaSecuencia extends Graficos {
         return (n > 0) ? n : 1;
     }
 
+    /**
+     * Convierte el índice de un dato a una posición de píxeles horizontal
+     */
     private int pxPos(int i, int total, int xMin, int xMax) {
         if (total <= 1) return (xMin + xMax) / 2;
         return xMin + i * (xMax - xMin) / (total - 1);
     }
 
+    /**
+     * Convierte un valor numérico a una posición de píxeles vertical
+     */
     private int pyVal(int val, int yMin, int yMax, int vMin, int vMax) {
         if (vMax == vMin) return (yMin + yMax) / 2;
         return yMax - (val - vMin) * (yMax - yMin) / (vMax - vMin);
     }
 
+    /**
+     * Dibuja la leyenda con los colores de las líneas, la media y el estilo punteado de la desviación
+     */
     private void dibujarLeyenda(Graphics g, int ancho, int alto) {
         g.setFont(new Font("SansSerif", Font.PLAIN, 11));
         int xL = MG_IZQ + 5;
@@ -200,6 +274,6 @@ public class GraficaSecuencia extends Graficos {
         g.setColor(colorDesvC1);
         dibujarLineaPunteada(g, xL, yL - 6, xL + 14, yL - 6);
         g.setColor(Color.BLACK);
-        g.drawString("Media±σ", xL + 18, yL);
+        g.drawString("Desviacion", xL + 18, yL);
     }
 }

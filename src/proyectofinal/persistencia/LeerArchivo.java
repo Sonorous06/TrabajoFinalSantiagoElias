@@ -5,8 +5,20 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 
+/**
+ * Clase encargada de la lectura de archivos de datos. Permite seleccionar
+ * archivos y extraer información filtrada por categorías.
+ */
 public class LeerArchivo {
 
+    /**
+     * Abre una ventana para seleccionar un archivo y extrae los datos de una
+     * categoría.
+     *
+     * @param categoriaElegida El nombre de la categoría que se quiere filtrar.
+     * @return Un arreglo de enteros con los valores encontrados, o null si hay
+     * un error.
+     */
     public static int[] obtenerDatos(String categoriaElegida) {
 
         JFileChooser selector = new JFileChooser();
@@ -57,7 +69,14 @@ public class LeerArchivo {
         return null;
     }
 
-    // igual que obtenerDatos pero recibe el archivo ya elegido, sin abrir diálogo
+    /**
+     * Lee los datos de una categoría desde un archivo específico ya
+     * proporcionado.
+     *
+     * @param archivo El archivo de donde se leerán los datos.
+     * @param categoriaElegida La categoría que se busca.
+     * @return Arreglo de enteros con los datos filtrados.
+     */
     public static int[] obtenerDatosDe(File archivo, String categoriaElegida) {
         try {
             Scanner sc = new Scanner(archivo);
@@ -88,6 +107,13 @@ public class LeerArchivo {
         return null;
     }
 
+    /**
+     * Revisa el archivo y crea una lista con todas las categorías únicas que
+     * encuentre.
+     *
+     * @param archivo El archivo a analizar.
+     * @return Un arreglo de textos (Strings) con los nombres de las categorías.
+     */
     //----------esta clase es nueva , sirve para poder leer las cate de manera dinamica
     //lee el archivo linea por linea , toma la primera columna , si no la habias visto , la guarda y regresa un arreglo de lo que encontro
     public static String[] leerCategorias(File archivo) {
@@ -106,7 +132,7 @@ public class LeerArchivo {
             }
             scanner.close();
         } catch (Exception e) {
-             System.out.println("Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
         return categorias.toArray(new String[0]);
     }

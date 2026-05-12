@@ -6,14 +6,19 @@ import java.awt.Graphics;
 import proyectofinal.logica.Estadisticos;
 import proyectofinal.logica.Graficos;
 
+/**
+ * Esta clase dibuja una grafica de caja y bigotes permite comparar visualmente
+ * dos categorías de datos, mostrando sus cuartiles, valores min, max y
+ * la media.
+ */
 public class GraficaBigote extends Graficos {
 
     //datos de la segunda categoría
     private Estadisticos datosCat2;
     private String nombreCat1;
     private String nombreCat2;
-    private boolean mostrarCat1; //controla si se dibuja la caja de la categoría 1
-    private boolean mostrarCat2; //controla si se dibuja la caja de la categoría 2
+    private boolean mostrarCat1; //controla si se dibuja la caja de la categoria 1
+    private boolean mostrarCat2; //controla si se dibuja la caja de la categoria 2
 
     //colores de borde y relleno para cada caja
     private static final Color colorBorde1 = new Color(180, 50, 50);
@@ -27,6 +32,18 @@ public class GraficaBigote extends Graficos {
     private static final int MG_SUP = 40;
     private static final int MG_INF = 50;
 
+    /**
+     * Crea una nueva grafica de bigotes configurando los datos y que categorias
+     * mostrar.
+     *
+     * @param titulo Texto que aparecerá arriba de la gráfica.
+     * @param datosCat1 Objeto con los cálculos de la primera categoría.
+     * @param nombreCat1 Nombre de la primera categoría.
+     * @param datosCat2 Objeto con los cálculos de la segunda categoría.
+     * @param nombreCat2 Nombre de la segunda categoría.
+     * @param mostrarCat1 Si es verdadero, se dibuja la primera caja.
+     * @param mostrarCat2 Si es verdadero, se dibuja la segunda caja.
+     */
     public GraficaBigote(String titulo, Estadisticos datosCat1, String nombreCat1, Estadisticos datosCat2, String nombreCat2, boolean mostrarCat1, boolean mostrarCat2) {
 
         super(titulo, datosCat1);
@@ -37,7 +54,12 @@ public class GraficaBigote extends Graficos {
         this.mostrarCat2 = mostrarCat2;
     }
 
-    //activan o desactivan cada categoría y redibujan la gráfica
+    /**
+     * Cambia la visibilidad de la categoria 1 y actualiza el dibujo.
+     *
+     * @param v verdadero para mostrar, falso para ocultar.
+     */
+    //activan o desactivan cada categoria y redibujan la gráfica
     public void setMostrarCat1(boolean v) {
         this.mostrarCat1 = v;
         repaint();
@@ -48,6 +70,12 @@ public class GraficaBigote extends Graficos {
         repaint();
     }
 
+    /**
+     * Metodo principal de dibujo que organiza el fondo, los ejes, la cuadricula
+     * y llama a la creación de las cajas.
+     *
+     * @param g Objeto de graficos donde se realiza el dibujo.
+     */
     @Override
     public void dibujarGrafica(Graphics g) {
 
@@ -63,7 +91,7 @@ public class GraficaBigote extends Graficos {
         g.setFont(new Font("SansSerif", Font.BOLD, 14));
         g.drawString(titulo, ancho / 3, 22);
 
-        //límites del área donde se dibuja la gráfica
+        //límites del area donde se dibuja la grafica
         int xMin = MG_IZQ;
         int xMax = ancho - MG_DER;
         int yMin = MG_SUP;
@@ -112,7 +140,7 @@ public class GraficaBigote extends Graficos {
 
         //dibujamos las cajas activas con su etiqueta de categoría abajo
         if (mostrarCat1 && misDatos != null) {
-           dibujarCaja(g, misDatos, cx1, anchoCaja, yMin, yMax, vMin, vMax, colorBorde1, colorRelleno1);
+            dibujarCaja(g, misDatos, cx1, anchoCaja, yMin, yMax, vMin, vMax, colorBorde1, colorRelleno1);
             g.setColor(Color.BLACK);
             g.setFont(new Font("SansSerif", Font.BOLD, 12));
             g.drawString(nombreCat1, cx1 - 6, yMax + 18);
@@ -127,15 +155,31 @@ public class GraficaBigote extends Graficos {
         dibujarLeyenda(g, ancho, alto);
     }
 
+    /**
+     * Dibuja los elementos de una caja individual: cuerpo, bigotes y el punto
+     * de la media.
+     *
+     * @param g Objeto de gráficos.
+     * @param datos Objeto con los valores estadísticos (mín, máx, cuartiles,
+     * media).
+     * @param cx Posición horizontal central de la caja.
+     * @param anchoCaja Ancho que tendrá la caja.
+     * @param yMin Límite superior del área de dibujo (en píxeles).
+     * @param yMax Límite inferior del área de dibujo (en píxeles).
+     * @param vMin Valor numérico mínimo en el eje Y.
+     * @param vMax Valor numérico máximo en el eje Y.
+     * @param colorBorde Color de las líneas.
+     * @param colorRell Color de relleno de la caja.
+     */
     //dibuja una caja completa: relleno Q1-Q3, borde, mediana, bigotes y punto de media
     private void dibujarCaja(Graphics g, Estadisticos datos, int cx, int anchoCaja, int yMin, int yMax, int vMin, int vMax, Color colorBorde, Color colorRell) {
 
         //convertimos los cinco puntos clave a píxeles
         int yMinPix = pyVal(datos.minimo(), yMin, yMax, vMin, vMax);
         int yMaxPix = pyVal(datos.maximo(), yMin, yMax, vMin, vMax);
-        int yQ1Pix = pyVal((int) datos.cuartil_1(), yMin, yMax, vMin, vMax);
-        int yQ2Pix = pyVal((int) datos.cuartil_2(), yMin, yMax, vMin, vMax);
-        int yQ3Pix = pyVal((int) datos.cuartil_3(), yMin, yMax, vMin, vMax);
+        int yQ1Pix = pyVal((int) datos.cuartil1(), yMin, yMax, vMin, vMax);
+        int yQ2Pix = pyVal((int) datos.cuartil2(), yMin, yMax, vMin, vMax);
+        int yQ3Pix = pyVal((int) datos.cuartil3(), yMin, yMax, vMin, vMax);
         int yMediaPix = pyVal((int) datos.media(), yMin, yMax, vMin, vMax);
 
         int mitad = anchoCaja / 2; //la mitad del ancho para centrar en cx
@@ -165,7 +209,10 @@ public class GraficaBigote extends Graficos {
         g.drawOval(cx - 6, yMediaPix - 6, 12, 12);
     }
 
-    //mínimo entre las categorías activas
+    /**
+     * Busca el valor más pequeño entre todas las categorías que se están mostrando.
+     * @return El valor mínimo global.
+     */
     private int calcularMinGlobal() {
         int min = Integer.MAX_VALUE;
         if (mostrarCat1 && misDatos != null && misDatos.minimo() < min) {
@@ -177,7 +224,10 @@ public class GraficaBigote extends Graficos {
         return (min == Integer.MAX_VALUE) ? 0 : min;
     }
 
-    //máximo entre las categorías activas
+    /**
+     * Busca el valor más grande entre todas las categorías que se están mostrando.
+     * @return El valor máximo global.
+     */
     private int calcularMaxGlobal() {
         int max = 0;
         if (mostrarCat1 && misDatos != null && misDatos.maximo() > max) {
@@ -189,7 +239,16 @@ public class GraficaBigote extends Graficos {
         return max;
     }
 
-    //convierte un valor numérico a píxeles en el eje Y (invertido: valores grandes arriba)
+    /**
+     * Convierte un valor de los datos a una posición en píxeles dentro de la ventana.
+     * 
+     * @param val Valor numérico a convertir.
+     * @param yMin Límite superior del dibujo.
+     * @param yMax Límite inferior del dibujo.
+     * @param vMin Valor mínimo del eje.
+     * @param vMax Valor máximo del eje.
+     * @return La posición en píxeles calculada.
+     */
     private int pyVal(int val, int yMin, int yMax, int vMin, int vMax) {
         if (vMax == vMin) {
             return (yMin + yMax) / 2;
@@ -197,7 +256,13 @@ public class GraficaBigote extends Graficos {
         return yMax - (val - vMin) * (yMax - yMin) / (vMax - vMin);
     }
 
-    //dibuja los cuadros de color y el punto de media en la leyenda
+    /**
+     * Dibuja una leyenda en la parte inferior para ver cada categoría 
+     * 
+     * @param g Objeto de gráficos.
+     * @param ancho Ancho total del panel.
+     * @param alto Alto total del panel.
+     */
     private void dibujarLeyenda(Graphics g, int ancho, int alto) {
         g.setFont(new Font("SansSerif", Font.PLAIN, 11));
         int xL = MG_IZQ + 5;
